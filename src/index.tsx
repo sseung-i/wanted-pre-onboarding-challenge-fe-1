@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { ThemeProvider } from "styled-components";
 import Router from "./Router";
+import GlobalStyle from "./styles/GlobalStyle";
+import theme from "./styles/theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -8,5 +11,10 @@ const root = ReactDOM.createRoot(
 root.render(
   // <React.StrictMode>
   // </React.StrictMode>
-  <Router />
+  <>
+    <GlobalStyle />
+    <ThemeProvider theme={theme}>
+      <Router />
+    </ThemeProvider>
+  </>
 );
