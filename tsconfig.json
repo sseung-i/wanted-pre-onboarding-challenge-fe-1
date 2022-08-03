@@ -16,5 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "Auth/components", "Auth/Login.tsx"]
+  "include": [
+    "src",
+    "Auth/components",
+    "Auth/Login.tsx",
+    "src/pages/components"
+  ]
 }

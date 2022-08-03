@@ -9,7 +9,7 @@ interface PropsType {
 
 type FirstInputType = { isFirst: boolean };
 
-const LoginInput = ({ iconClass, type, handleChangeInput }: PropsType) => {
+const AuthInput = ({ iconClass, type, handleChangeInput }: PropsType) => {
   return (
     <InputWrap isFirst={type === "email"}>
       <Icon className={iconClass} />
@@ -47,4 +47,4 @@ const Input = styled.input.attrs(({ type }) => ({
   border-radius: 5px;
 `;
 
-export default LoginInput;
+export default AuthInput;

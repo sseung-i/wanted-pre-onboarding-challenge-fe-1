@@ -1,12 +1,23 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import LoginInput from "./components/LoginInput";
+import myserver from "../axios";
+import AuthInput from "./components/AuthInput";
 
-const Login = () => {
+interface SystemError {
+  code: string;
+  config: {};
+  message: string;
+  name: string;
+  request: XMLHttpRequest;
+  response: {};
+}
+
+const Join = () => {
   const [data, setData] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target);
     const { id, value } = e.target;
     setData((prev) => ({ ...prev, [id]: value }));
   };
@@ -20,23 +31,40 @@ const Login = () => {
     return !varidation;
   };
 
+  const handleJoin = async () => {
+    try {
+      const res = await myserver.post("/users/create", data);
+      console.log(res.status);
+      alert("환영합니다! 로그인 해 주세요 :)");
+      res.status === 200 && navigate("/");
+    } catch (err: any) {
+      if (err.response.status === 409) {
+        alert(err.response.data.details);
+      } else {
+        alert("회원가입에 실패하였습니다.");
+      }
+    }
+  };
+
   return (
     <LoginPage>
       <Wrap>
-        <Title isSuccese={handleSubmitDisabled()}>나만의 Todo List</Title>
-        <LoginInput
+        <Title isSuccese={handleSubmitDisabled()}>회원가입</Title>
+        <AuthInput
           iconClass="fa-solid fa-at fa-2x"
           type="email"
           handleChangeInput={handleChangeInput}
         />
-        <LoginInput
+        <AuthInput
           iconClass="fa-solid fa-lock fa-2x"
           type="password"
           handleChangeInput={handleChangeInput}
         />
-        <SubmitBtn disabled={handleSubmitDisabled()}>로그인 하기</SubmitBtn>
+        <SubmitBtn disabled={handleSubmitDisabled()} onClick={handleJoin}>
+          회원가입 하기
+        </SubmitBtn>
       </Wrap>
-      <JoinBtn>회원가입하기</JoinBtn>
+      <JoinBtn to="/auth/login">로그인하기</JoinBtn>
     </LoginPage>
   );
 };
@@ -66,7 +94,7 @@ const Wrap = styled.div`
 const Title = styled.h1`
   padding: 20px 0 10px;
   color: ${({ isSuccese, theme }: { isSuccese: boolean; theme: any }) =>
-    isSuccese ? theme.color.dark_gray : theme.color.succese};
+    isSuccese ? theme.color.dark_gray : theme.color.main_point};
 `;
 
 const SubmitBtn = styled.button`
@@ -76,7 +104,7 @@ const SubmitBtn = styled.button`
   font-size: 1rem;
   color: #fff;
   font-weight: 600;
-  background-color: ${({ theme }) => theme.color.succese};
+  background-color: ${({ theme }) => theme.color.main_point};
 
   &:disabled {
     color: ${({ theme }) => theme.color.middle_gray};
@@ -85,9 +113,9 @@ const SubmitBtn = styled.button`
   }
 `;
 
-const JoinBtn = styled.button`
+const JoinBtn = styled(Link)`
   color: ${({ theme }) => theme.color.middle_gray};
   text-decoration: underline;
 `;
 
-export default Login;
+export default Join;
