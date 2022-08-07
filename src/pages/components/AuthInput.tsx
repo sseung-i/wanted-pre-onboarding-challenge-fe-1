@@ -13,7 +13,7 @@ const AuthInput = ({ iconClass, type, handleChangeInput }: PropsType) => {
   return (
     <InputWrap isFirst={type === "email"}>
       <Icon className={iconClass} />
-      <Input type={type} onChange={handleChangeInput} />
+      <Input type={type} id={type} onChange={handleChangeInput} />
     </InputWrap>
   );
 };
@@ -36,10 +36,7 @@ const Icon = styled.i`
   color: #ddd;
 `;
 
-const Input = styled.input.attrs(({ type }) => ({
-  type,
-  id: type,
-}))`
+const Input = styled.input`
   width: 80%;
   height: 36px;
   padding: 10px;

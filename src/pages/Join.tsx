@@ -80,7 +80,7 @@ const LoginPage = styled.section`
   text-align: center;
 `;
 
-const Wrap = styled.div`
+const Wrap = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;

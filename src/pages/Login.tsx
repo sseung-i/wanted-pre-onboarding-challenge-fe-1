@@ -7,49 +7,77 @@ import { useAuthStore } from "../store/auth";
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
-  const navigate = useNavigate();
   const setIsLogined = useAuthStore((state) => state.setIsLogined);
+  const navigate = useNavigate();
 
-  const haveTokenTest = (token: string) => {
-    alert("다시오셨군요! 자동로그인 되었습니다 :)");
-    setIsLogined();
-    token && navigate("/");
-  };
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("로그인페이지", token);
-    token && haveTokenTest(token);
-  }, []);
+  /* 로그인 데이터 담기 */
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target);
     const { id, value } = e.target;
     setData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleSubmitDisabled = () => {
-    // const regExp = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i;
-    // const emailCheck = data.email.match(regExp);
-    const pwCheck = 6 <= data.password.length;
+    const pwCheck = 8 <= data.password.length;
+    const emailCheck = data.email.includes("@") && data.email.includes(".");
 
-    const varidation = pwCheck && true;
+    const varidation = pwCheck && emailCheck;
     return !varidation;
   };
 
+  /******************* */
+  const getData = async (token: string) => {
+    try {
+      const res = await myserver.get("/todos/", {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      const reverseData = res.data.data.reverse();
+      return reverseData[0].id;
+    } catch (err) {
+      console.log("Detail 데이터 가져오기 에러", err);
+    }
+  };
+
+  // 1. 로그인하기 클릭!
   const handleLogin = async () => {
     try {
+      // 2. 로그인 토큰 가져오기
       const res = await myserver.post("/users/login", data);
-      // console.log(res);
+
+      // 3. 로컬스토리지에 토큰 담기
       const { message, token } = res.data;
       localStorage.setItem("token", token);
+
+      // 4. 로그인 완료
       alert(message);
-      navigate("/");
+      setIsLogined(true);
+
+      const id = await getData(token);
+
+      // 5. 디테일로 이동
+      navigate(`/detail/${id}`);
     } catch (err: any) {
       alert(err.response.data.details);
       console.log(err);
     }
   };
+
+  // 로컬스토리지에 토큰이 존재한다면 자동로그인
+  const haveTokenTest = async (token: string) => {
+    alert("꺄~💕 다시오셨군요! 자동로그인 되었습니다 🥰 ");
+    setIsLogined(true);
+    if (token) {
+      const id = await getData(token);
+      navigate(`/detail/${id}`);
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    token && haveTokenTest(token);
+  }, []);
 
   return (
     <LoginPage>
