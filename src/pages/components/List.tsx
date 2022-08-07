@@ -12,6 +12,7 @@ interface Todo {
 
 const List = () => {
   const [listData, setListData] = useState([{}]);
+
   const setIsCreate = useToDoDataStore((state) => state.setIsCreate);
   const isCreated = useToDoDataStore((state) => state.isCreated);
   const isLogined = useAuthStore((state) => state.isLogined);
