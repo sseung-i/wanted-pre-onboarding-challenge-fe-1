@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import myserver from "../axios";
+import { useAuthStore } from "../store/auth";
 import Detail from "./components/Detail";
+import Main from "./Main";
 
 interface Todo {
   title?: string;
@@ -18,6 +20,8 @@ const Read = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const isLogined = useAuthStore((state) => state.isLogined);
+  const setIsLogined = useAuthStore((state) => state.setIsLogined);
 
   const getData = async () => {
     try {
@@ -72,9 +76,12 @@ const Read = () => {
 
   useEffect(() => {
     getData();
+    if (id) {
+      setIsLogined(true);
+    }
   }, [id]);
 
-  return (
+  return isLogined ? (
     <Detail>
       <Top>
         <Title>{title}</Title>
@@ -85,6 +92,8 @@ const Read = () => {
       </Top>
       <Area>{content}</Area>
     </Detail>
+  ) : (
+    <Main />
   );
 };
 

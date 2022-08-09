@@ -64,7 +64,7 @@ const Create = () => {
     <Detail>
       <Top>
         <Title id="title" type="text" placeholder="제목" onKeyUp={changeData} />
-        <ModifyBtn onClick={postNewToDoData} submitDisabled={submitDisabled}>
+        <ModifyBtn onClick={postNewToDoData} disabled={!submitDisabled}>
           작성완료
         </ModifyBtn>
       </Top>
@@ -109,7 +109,7 @@ const Area = styled.textarea`
   ${placeholder}
 `;
 
-const Btn = styled.div`
+const Btn = styled.button`
   height: fit-content;
   padding: 5px 10px;
   border: 1px solid ${({ theme }) => theme.color.light_gray};
@@ -120,18 +120,11 @@ const Btn = styled.div`
 `;
 
 const ModifyBtn = styled(Btn)`
-  ${({ submitDisabled, theme }: PlaceHolder) => {
-    if (submitDisabled) {
-      return css`
-        background-color: #fff;
-      `;
-    } else {
-      return css`
-        background-color: ${theme.color.light_gray};
-        cursor: default;
-      `;
-    }
-  }};
+  background-color: #fff;
+  &:disabled {
+    background-color: ${({ theme }) => theme.color.light_gray};
+    cursor: default;
+  }
 `;
 
 export default Create;

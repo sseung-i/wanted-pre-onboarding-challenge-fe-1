@@ -25,7 +25,12 @@ ul {
 
 a {
   text-decoration: none;
-  color: inherit
+  color: inherit;
+  font-size: inherit;
+}
+
+button {
+  font-size: inherit;
 }
 
   `;

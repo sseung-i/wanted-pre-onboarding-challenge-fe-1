@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth";
 
@@ -52,7 +52,7 @@ const Title = styled.h1`
 
 const Wrap = styled.div``;
 
-const Sign = styled(Link)`
+const NavButton = css`
   color: ${({ theme }) => theme.color.middle_gray};
   font-weight: 500;
   transition: color 0.3s ease-in-out;
@@ -63,9 +63,12 @@ const Sign = styled(Link)`
   }
 `;
 
-const LoginBtn = styled(Sign)``;
+const LoginBtn = styled(Link)`
+  ${NavButton}
+`;
 
-const JoinBtn = styled(Sign)`
+const JoinBtn = styled(Link)`
+  ${NavButton}
   position: relative;
   margin-left: 30px;
 
@@ -80,6 +83,8 @@ const JoinBtn = styled(Sign)`
   }
 `;
 
-const LogoutBtn = styled.button``;
+const LogoutBtn = styled.button`
+  ${NavButton}
+`;
 
 export default Nav;
