@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
-import myserver from "../../axios";
-import { useToDoDataStore } from "../../store/todoData";
-import Detail from "./Detail";
+import myserver from "../axios";
+import { useToDoDataStore } from "../store/todoData";
+import Detail from "./components/Detail";
 
 interface PlaceHolder {
   submitDisabled: boolean;
@@ -42,7 +42,7 @@ const Create = () => {
           }
         );
 
-        setIsCreate();
+        setIsCreate(false);
 
         const id = res.data.data.id;
         navigate(`/detail/${id}`);
@@ -53,6 +53,10 @@ const Create = () => {
       return;
     }
   };
+
+  useEffect(() => {
+    setIsCreate(true);
+  }, []);
 
   const submitDisabled = title !== "" && content !== "";
 

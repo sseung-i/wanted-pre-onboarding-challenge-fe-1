@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import myserver from "../../axios";
-import Detail from "./Detail";
+import myserver from "../axios";
+import Detail from "./components/Detail";
 
 interface Todo {
   title?: string;
@@ -105,6 +105,7 @@ const Area = styled.div`
   height: 60vh;
   margin-top: 30px;
   padding: 10px 15px;
+  word-wrap: break-word;
 `;
 
 const BtnWrap = styled.div`

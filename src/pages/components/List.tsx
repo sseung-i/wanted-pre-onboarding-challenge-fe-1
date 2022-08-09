@@ -22,6 +22,8 @@ const List = () => {
 
   const { id } = useParams();
 
+  console.log(listData);
+
   const getList = async () => {
     try {
       const res = await myserver.get("/todos", {
@@ -37,12 +39,12 @@ const List = () => {
   };
 
   const cancelCreate = () => {
-    setIsCreate();
+    setIsCreate(false);
     navigate(-1);
   };
 
   const goToCreatePage = () => {
-    setIsCreate();
+    setIsCreate(true);
     navigate("/detail/create");
   };
 
@@ -64,8 +66,13 @@ const List = () => {
           ) : (
             <CreateBtn onClick={goToCreatePage}>새로운 메모</CreateBtn>
           )}
-          {listData?.map((todo: Todo) => (
-            <TodoCard key={todo.id} {...todo} />
+          {listData.map((todo: Todo) => (
+            <TodoCard
+              key={`${todo.id}`}
+              id={todo.id}
+              title={todo.title}
+              content={todo.content}
+            />
           ))}
         </ToDoList>
       ) : (

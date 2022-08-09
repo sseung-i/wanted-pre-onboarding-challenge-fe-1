@@ -3,7 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 interface Props {
-  [key: string]: string;
+  id: string;
+  title: string;
+  content: string;
+  key: string;
+  // [key: string]: string;
 }
 
 const TodoCard = (props: Props) => {

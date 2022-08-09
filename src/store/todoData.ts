@@ -2,12 +2,12 @@ import create from "zustand";
 
 interface State {
   isCreated: boolean;
-  setIsCreate: () => void;
+  setIsCreate: (isCreated: boolean) => void;
 }
 
 export const useToDoDataStore = create<State>((set) => ({
   isCreated: false,
-  setIsCreate: () => {
-    set((state) => ({ isCreated: !state.isCreated }));
+  setIsCreate: (isCreated) => {
+    set({ isCreated });
   },
 }));

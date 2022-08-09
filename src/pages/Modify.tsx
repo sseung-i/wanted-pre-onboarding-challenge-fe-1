@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled, { css } from "styled-components";
-import myserver from "../../axios";
-import Detail from "./Detail";
+import myserver from "../axios";
+import Detail from "./components/Detail";
 
 interface PlaceHolder {
   submitDisabled: boolean;

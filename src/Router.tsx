@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Create from "./pages/components/Create";
-import Modify from "./pages/components/Modify";
+import Create from "./pages/Create";
+import Modify from "./pages/Modify";
 import Nav from "./pages/components/Nav";
-import Read from "./pages/components/Read";
+import Read from "./pages/Read";
 import Join from "./pages/Join";
 import Login from "./pages/Login";
 import Main from "./pages/Main";
