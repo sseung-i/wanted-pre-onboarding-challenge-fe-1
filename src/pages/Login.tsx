@@ -52,12 +52,9 @@ const Login = () => {
 
       // 4. 로그인 완료
       alert(message);
-      setIsLogined(true);
 
-      const id = await getData(token);
-
-      // 5. 디테일로 이동
-      navigate(`/detail/${id}`);
+      // 5. 루트로 이동
+      navigate(`/`);
     } catch (err: any) {
       alert(err.response.data.details);
       console.log(err);
