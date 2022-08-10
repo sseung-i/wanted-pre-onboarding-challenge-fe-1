@@ -10,18 +10,21 @@ const Nav = () => {
 
   const handleLogout = () => {
     if (window.confirm("🥲 정말 로그아웃 하시겠습니까? 🥲")) {
-      setIsLogined(false);
+      // setIsLogined(false);
+      localStorage.removeItem("token");
       navigate("/");
     } else {
       return;
     }
   };
 
+  const token = localStorage.getItem("token");
+
   return (
     <>
       <Header>
         <Title>To Do List!</Title>
-        {isLogined ? (
+        {token ? (
           <LogoutBtn onClick={handleLogout}>로그아웃</LogoutBtn>
         ) : (
           <Wrap>

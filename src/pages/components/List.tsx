@@ -6,37 +6,24 @@ import { useAuthStore } from "../../store/auth";
 import { useToDoDataStore } from "../../store/todoData";
 import TodoCard from "./TodoCard";
 
-interface Todo {
-  [key: string]: string;
+interface TodoType {
+  content: string;
+  createdAt?: string;
+  id?: string | undefined;
+  title: string;
+  updatedAt?: string;
 }
 
 const List = () => {
-  const [listData, setListData] = useState([{}]);
-
   const setIsCreate = useToDoDataStore((state) => state.setIsCreate);
   const isCreated = useToDoDataStore((state) => state.isCreated);
-  const isLogined = useAuthStore((state) => state.isLogined);
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  ////
 
-  const { id } = useParams();
-
-  console.log(listData);
-
-  const getList = async () => {
-    try {
-      const res = await myserver.get("/todos", {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      const reversData: Todo[] = res.data.data.reverse();
-      reversData && setListData(reversData);
-    } catch (err) {
-      console.log("이것이 에러다 ::", err);
-    }
-  };
+  const toDoList = useToDoDataStore((state) => state.toDoList);
+  const getToDoList = useToDoDataStore((state) => state.getToDoList);
 
   const cancelCreate = () => {
     setIsCreate(false);
@@ -49,15 +36,12 @@ const List = () => {
   };
 
   useEffect(() => {
-    console.log("로그인 상태", isLogined);
-    getList();
-  }, [id]);
-
-  if (!isLogined) navigate("/");
+    getToDoList();
+  }, []);
 
   return (
     <Wrap>
-      {isLogined ? (
+      {token ? (
         <ToDoList>
           {isCreated ? (
             <CreateCancelBtn onClick={cancelCreate}>
@@ -66,13 +50,8 @@ const List = () => {
           ) : (
             <CreateBtn onClick={goToCreatePage}>새로운 메모</CreateBtn>
           )}
-          {listData.map((todo: Todo) => (
-            <TodoCard
-              key={`${todo.id}`}
-              id={todo.id}
-              title={todo.title}
-              content={todo.content}
-            />
+          {toDoList.map(({ id, title, content }: TodoType) => (
+            <TodoCard key={`${id}`} id={id} title={title} content={content} />
           ))}
         </ToDoList>
       ) : (

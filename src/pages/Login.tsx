@@ -4,11 +4,17 @@ import styled from "styled-components";
 import AuthInput from "./components/AuthInput";
 import myserver from "../axios";
 import { useAuthStore } from "../store/auth";
+import { useToDoDataStore } from "../store/todoData";
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
   const setIsLogined = useAuthStore((state) => state.setIsLogined);
   const navigate = useNavigate();
+
+  ///
+
+  const toDoList = useToDoDataStore((state) => state.toDoList);
+  const getToDoList = useToDoDataStore((state) => state.getToDoList);
 
   /* 로그인 데이터 담기 */
 
@@ -52,9 +58,11 @@ const Login = () => {
 
       // 4. 로그인 완료
       alert(message);
+      getToDoList();
+      console.log("로그인 할 때 ", toDoList);
 
       // 5. 루트로 이동
-      navigate(`/`);
+      navigate(`/${toDoList[0].id}`);
     } catch (err: any) {
       alert(err.response.data.details);
       console.log(err);
@@ -67,7 +75,7 @@ const Login = () => {
     setIsLogined(true);
     if (token) {
       const id = await getData(token);
-      navigate(`/detail/${id}`);
+      navigate(`/${id}`);
     }
   };
 

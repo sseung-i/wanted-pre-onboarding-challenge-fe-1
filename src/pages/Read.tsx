@@ -3,97 +3,67 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import myserver from "../axios";
 import { useAuthStore } from "../store/auth";
+import { useToDoDataStore } from "../store/todoData";
 import Detail from "./components/Detail";
 import Main from "./Main";
 
-interface Todo {
-  title?: string;
-  content?: string;
-  // id: string;
-  // createdAt: string;
+interface TodoType {
+  content: string;
+  createdAt?: string;
+  id?: string;
+  title: string;
   updatedAt?: string;
 }
 
 const Read = () => {
-  const [data, setData] = useState({ title: "", content: "" });
-  const { title, content }: Todo = data;
   const { id } = useParams();
+
+  const getToDo = useToDoDataStore((state) => state.getToDo);
+  const toDo = useToDoDataStore((state) => state.toDo);
+  const toDoList = useToDoDataStore((state) => state.toDoList);
+  const deleteTodo = useToDoDataStore((state) => state.deleteTodo);
+  const getToDoList = useToDoDataStore((state) => state.getToDoList);
+
+  const { title, content } = toDo;
+
   const navigate = useNavigate();
+
   const token = localStorage.getItem("token");
-  const isLogined = useAuthStore((state) => state.isLogined);
-  const setIsLogined = useAuthStore((state) => state.setIsLogined);
 
-  const getData = async () => {
-    try {
-      const res = await myserver.get(`/todos/${id}`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      setData(res.data.data);
-    } catch (err) {
-      console.log("Detail 데이터 가져오기 에러", err);
-    }
-  };
-
-  const afterDeleteData = async () => {
-    try {
-      const res = await myserver.get(`/todos`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      console.log("삭제 이후 데이터", res.data.data);
-      return res.data.data;
-    } catch (err) {
-      console.log("Detail 데이터 가져오기 에러", err);
-    }
+  const afterDelete = async () => {
+    getToDoList();
+    navigate(`/${toDoList[0].id}`);
   };
 
   const goToModifyPage = () => {
-    navigate(`/detail/modify/${id}`);
+    navigate(`/detail/update/${id}`);
   };
 
-  const deleteTodo = async () => {
-    try {
-      if (window.confirm("정말 삭제하시겠습니까?")) {
-        await myserver.delete(`/todos/${id}`, {
-          headers: {
-            Authorization: `${token}`,
-          },
-        });
-
-        const deleteDataArr = await afterDeleteData();
-        const reverseArr = deleteDataArr.reverse();
-        const newId = reverseArr[0].id;
-        console.log("newId", newId);
-        navigate(`/detail/${newId}`);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  const handleDeleteTodo = async () => {
+    deleteTodo(id);
+    afterDelete();
   };
 
   useEffect(() => {
-    getData();
-    if (id) {
-      setIsLogined(true);
+    if (token) {
+      // getToDoList();
+      getToDo(id);
+    } else {
+      navigate("/auth/login");
     }
   }, [id]);
 
-  return isLogined ? (
+  return (
     <Detail>
       <Top>
         <Title>{title}</Title>
         <BtnWrap>
           <ModifyBtn onClick={goToModifyPage}>수정하기</ModifyBtn>
-          <DeleteBtn onClick={deleteTodo}>삭제하기</DeleteBtn>
+          <DeleteBtn onClick={handleDeleteTodo}>삭제하기</DeleteBtn>
         </BtnWrap>
       </Top>
       <Area>{content}</Area>
     </Detail>
-  ) : (
-    <Main />
   );
 };
 

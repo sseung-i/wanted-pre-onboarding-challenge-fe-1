@@ -9,7 +9,7 @@ interface PlaceHolder {
   theme: any;
 }
 
-const Modify = () => {
+const Update = () => {
   const [data, setData] = useState({ title: "", content: "" });
   const { title, content } = data;
   const navigate = useNavigate();
@@ -149,4 +149,4 @@ const ModifyBtn = styled(Btn)`
   }};
 `;
 
-export default Modify;
+export default Update;

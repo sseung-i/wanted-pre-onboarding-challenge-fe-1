@@ -1,11 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Create from "./pages/Create";
-import Modify from "./pages/Modify";
 import Nav from "./pages/components/Nav";
-import Read from "./pages/Read";
 import Join from "./pages/Join";
 import Login from "./pages/Login";
-import Main from "./pages/Main";
+import Create from "./pages/Create";
+import Read from "./pages/Read";
+import Update from "./pages/Update";
 
 const Router = () => {
   return (
@@ -13,9 +12,9 @@ const Router = () => {
       <Routes>
         <Route element={<Nav />}>
           <Route path="/" element={<Read />} />
-          <Route path={"/detail/:id"} element={<Read />} />
+          <Route path={"/:id"} element={<Read />} />
           <Route path={"/detail/create"} element={<Create />} />
-          <Route path={"/detail/modify/:id"} element={<Modify />} />
+          <Route path={"/detail/update/:id"} element={<Update />} />
         </Route>
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/join" element={<Join />} />

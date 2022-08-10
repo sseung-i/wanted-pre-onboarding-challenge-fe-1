@@ -1,9 +1,10 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useToDoDataStore } from "../../store/todoData";
 
 interface Props {
-  id: string;
+  id: string | undefined;
   title: string;
   content: string;
   key: string;
@@ -11,12 +12,13 @@ interface Props {
 }
 
 const TodoCard = (props: Props) => {
+  const toDoList = useToDoDataStore((state) => state.toDoList);
   const { title, content, id } = props;
-  const { id: nowPage } = useParams();
+  const { id: nowPage = `${toDoList[0].id}` } = useParams();
   const navigate = useNavigate();
 
   const setNowView = () => {
-    navigate(`/detail/${id}`);
+    navigate(`/${id}`);
   };
 
   return (
