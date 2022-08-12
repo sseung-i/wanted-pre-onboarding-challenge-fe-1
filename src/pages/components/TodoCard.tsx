@@ -40,7 +40,8 @@ const Card = styled.li`
 `;
 
 const Title = styled.h2`
-  font-size: 1.4rem;
+  font-size: 1.25rem;
+  font-weight: 600;
   padding-bottom: 3px;
   border-bottom: 1px solid ${({ theme }) => theme.color.light_gray};
 `;

@@ -5,6 +5,8 @@ import Router from "./Router";
 import GlobalStyle from "./styles/GlobalStyle";
 import theme from "./styles/theme";
 
+localStorage.removeItem("token");
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

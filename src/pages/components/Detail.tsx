@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import styled from "styled-components";
-import { useAuthStore } from "../../store/auth";
 import List from "./List";
 
 interface ChildProps {
@@ -8,15 +6,6 @@ interface ChildProps {
 }
 
 const Detail = ({ children }: ChildProps) => {
-  const token = localStorage.getItem("token");
-
-  const setIsLogined = useAuthStore((state) => state.setIsLogined);
-
-  useEffect(() => {
-    if (token) {
-      setIsLogined(true);
-    }
-  }, []);
   return (
     <Container>
       <List />

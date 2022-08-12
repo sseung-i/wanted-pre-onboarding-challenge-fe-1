@@ -80,9 +80,13 @@ const BtnWrap = styled.div`
 `;
 
 const Btn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 5px 10px;
   border: 1px solid ${({ theme }) => theme.color.light_gray};
   border-radius: 5px;
+  white-space: nowrap;
   color: ${({ theme }) => theme.color.middle_gray};
   cursor: pointer;
 `;

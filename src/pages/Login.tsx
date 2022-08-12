@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AuthInput from "./components/AuthInput";
-import myserver from "../axios";
 import { useAuthStore } from "../store/auth";
 import { useToDoDataStore } from "../store/todoData";
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
-  const setIsLogined = useAuthStore((state) => state.setIsLogined);
   const navigate = useNavigate();
 
   /// store
@@ -34,7 +32,7 @@ const Login = () => {
 
   // 1. 로그인하기 클릭!
   const handleLogin = async () => {
-    getToken(data, getToDoList);
+    getToken(data);
     const firstId = await getToDoList();
 
     navigate(`/${firstId}`);
@@ -43,7 +41,6 @@ const Login = () => {
   // 로컬스토리지에 토큰이 존재한다면 자동로그인
   const haveTokenTest = async (token: string) => {
     alert("꺄~💕 다시오셨군요! 자동로그인 되었습니다 🥰 ");
-    setIsLogined(true);
     if (token) {
       getToDoList();
       const id = toDoList[0].id;
