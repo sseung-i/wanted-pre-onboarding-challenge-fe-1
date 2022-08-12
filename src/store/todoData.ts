@@ -21,6 +21,11 @@ interface State {
   getToDo: (id: IdType) => void;
   getToDoList: () => void;
   deleteTodo: (id: IdType) => void;
+  createTodo: (
+    title: string,
+    content: string,
+    setIsCreate: (isCreated: boolean) => void
+  ) => {};
 }
 
 export const useToDoDataStore = create<State>((set) => ({
@@ -75,6 +80,34 @@ export const useToDoDataStore = create<State>((set) => ({
       }
     } catch (err) {
       console.log(err);
+    }
+  },
+  createTodo: async (
+    title: string,
+    content: string,
+    setIsCreate: (isCreated: boolean) => void
+  ) => {
+    if (window.confirm("글 작성을 완료하시겠습니까?")) {
+      try {
+        const res = await myserver.post(
+          "/todos",
+          {
+            title,
+            content,
+          },
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+
+        setIsCreate(false);
+
+        return res.data.data.id;
+      } catch (err) {
+        console.log("글 작성 완료 에러 ::", err);
+      }
     }
   },
 }));

@@ -13,9 +13,10 @@ interface PlaceHolder {
 const Create = () => {
   const [data, setData] = useState({ title: "", content: "" });
   const { title, content } = data;
-  const setIsCreate = useToDoDataStore((state) => state.setIsCreate);
   const navigate = useNavigate();
 
+  const setIsCreate = useToDoDataStore((state) => state.setIsCreate);
+  const createTodo = useToDoDataStore((state) => state.createTodo);
   const changeData = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -26,45 +27,21 @@ const Create = () => {
   };
 
   const postNewToDoData = async () => {
-    if (window.confirm("글 작성을 완료하시겠습니까?")) {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await myserver.post(
-          "/todos",
-          {
-            title,
-            content,
-          },
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
-          }
-        );
-
-        setIsCreate(false);
-
-        const id = res.data.data.id;
-        navigate(`/detail/${id}`);
-      } catch (err) {
-        console.log("새로운 투두 만들다가 실패!!");
-      }
-    } else {
-      return;
-    }
+    const newTodoId = await createTodo(title, content, setIsCreate);
+    navigate(`/${newTodoId}`);
   };
 
   useEffect(() => {
     setIsCreate(true);
   }, []);
 
-  const submitDisabled = title !== "" && content !== "";
+  const submitDisabled = title === "" || content === "";
 
   return (
     <Detail>
       <Top>
         <Title id="title" type="text" placeholder="제목" onKeyUp={changeData} />
-        <ModifyBtn onClick={postNewToDoData} disabled={!submitDisabled}>
+        <ModifyBtn onClick={postNewToDoData} disabled={submitDisabled}>
           작성완료
         </ModifyBtn>
       </Top>
