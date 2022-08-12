@@ -11,7 +11,8 @@ const Login = () => {
   const setIsLogined = useAuthStore((state) => state.setIsLogined);
   const navigate = useNavigate();
 
-  ///
+  /// store
+  const getToken = useAuthStore((state) => state.getToken);
 
   const toDoList = useToDoDataStore((state) => state.toDoList);
   const getToDoList = useToDoDataStore((state) => state.getToDoList);
@@ -33,24 +34,10 @@ const Login = () => {
 
   // 1. 로그인하기 클릭!
   const handleLogin = async () => {
-    try {
-      // 2. 로그인 토큰 가져오기
-      const res = await myserver.post("/users/login", data);
+    getToken(data, getToDoList);
+    const firstId = await getToDoList();
 
-      // 3. 로컬스토리지에 토큰 담기
-      const { message, token } = res.data;
-      localStorage.setItem("token", token);
-
-      // 4. 로그인 완료
-      alert(message);
-      getToDoList();
-
-      // 5. 루트로 이동
-      navigate(`/${toDoList[0].id}`);
-    } catch (err: any) {
-      alert(err.response.data.details);
-      console.log(err);
-    }
+    navigate(`/${firstId}`);
   };
 
   // 로컬스토리지에 토큰이 존재한다면 자동로그인

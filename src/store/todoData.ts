@@ -20,7 +20,7 @@ interface State {
   toDoList: ToDoType[];
   updateToDoData: { title: string; content: string };
   getToDo: (id: IdType) => void;
-  getToDoList: () => void;
+  getToDoList: () => Promise<string>;
   deleteTodo: (id: IdType) => void;
   createTodo: (
     title: string,
@@ -63,9 +63,11 @@ export const useToDoDataStore = create<State>((set) => ({
           Authorization: `${token}`,
         },
       });
-      const toDoList = res.data.data.reverse();
+      const toDoList = await res.data.data.reverse();
 
       set({ toDoList });
+
+      return toDoList[0].id;
     } catch (err) {
       console.log("todo List 데이터 가져오기 에러 ::", err);
     }
