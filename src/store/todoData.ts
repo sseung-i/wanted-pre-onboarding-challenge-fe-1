@@ -18,6 +18,7 @@ interface State {
   setIsCreate: (isCreated: boolean) => void;
   toDo: ToDoType;
   toDoList: ToDoType[];
+  updateToDoData: { title: string; content: string };
   getToDo: (id: IdType) => void;
   getToDoList: () => void;
   deleteTodo: (id: IdType) => void;
@@ -26,6 +27,9 @@ interface State {
     content: string,
     setIsCreate: (isCreated: boolean) => void
   ) => {};
+  updateTodo: (id: IdType, title: string, content: string) => void;
+  defaultUpdateToDoData: () => void;
+  changeNewData: (targetId: string, value: string) => void;
 }
 
 export const useToDoDataStore = create<State>((set) => ({
@@ -35,6 +39,10 @@ export const useToDoDataStore = create<State>((set) => ({
   },
   toDo: { content: "", createdAt: "", id: "", title: "", updatedAt: "" },
   toDoList: [{ content: "", createdAt: "", id: "", title: "", updatedAt: "" }],
+  updateToDoData: {
+    content: "",
+    title: "",
+  },
   getToDo: async (id) => {
     try {
       const res = await myserver.get(`/todos/${id}`, {
@@ -70,13 +78,6 @@ export const useToDoDataStore = create<State>((set) => ({
             Authorization: `${token}`,
           },
         });
-
-        // getToDoList()
-        // const deleteDataArr = await afterDeleteData();
-        // const reverseArr = deleteDataArr.reverse();
-        // const newId = reverseArr[0].id;
-        // console.log("newId", newId);
-        // navigate(`/detail/${newId}`);
       }
     } catch (err) {
       console.log(err);
@@ -108,6 +109,46 @@ export const useToDoDataStore = create<State>((set) => ({
       } catch (err) {
         console.log("글 작성 완료 에러 ::", err);
       }
+    } else {
+      return;
+    }
+  },
+  updateTodo: async (id, title, content) => {
+    if (window.confirm("글 작성을 완료하시겠습니까?")) {
+      try {
+        await myserver.put(
+          `/todos/${id}`,
+          {
+            title,
+            content,
+          },
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+      } catch (err) {
+        console.log("새로운 투두 만들다가 실패!!");
+      }
+    } else {
+      return;
+    }
+  },
+  defaultUpdateToDoData: () => {
+    set((state) => ({
+      updateToDoData: { title: state.toDo.title, content: state.toDo.content },
+    }));
+  },
+  changeNewData: (targetId, value) => {
+    if (targetId === "title") {
+      set((state) => ({
+        updateToDoData: { ...state.updateToDoData, title: value },
+      }));
+    } else {
+      set((state) => ({
+        updateToDoData: { ...state.updateToDoData, content: value },
+      }));
     }
   },
 }));

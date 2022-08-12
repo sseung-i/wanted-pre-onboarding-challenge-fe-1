@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 import myserver from "../axios";
+import { useToDoDataStore } from "../store/todoData";
 import Detail from "./components/Detail";
 
 interface PlaceHolder {
@@ -10,63 +11,50 @@ interface PlaceHolder {
 }
 
 const Update = () => {
-  const [data, setData] = useState({ title: "", content: "" });
-  const { title, content } = data;
-  const navigate = useNavigate();
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  // const getToDo = useToDoDataStore((state) => state.getToDo);
+
+  // 초기값 세팅
+  const toDo = useToDoDataStore((state) => state.toDo);
+  const defaultUpdateToDoData = useToDoDataStore(
+    (state) => state.defaultUpdateToDoData
+  );
+
+  // 수정 완료
+  const updateTodo = useToDoDataStore((state) => state.updateTodo);
+
+  // 인풋 입력 수정값
+  const changeNewData = useToDoDataStore((state) => state.changeNewData);
+  const updateToDoData = useToDoDataStore((state) => state.updateToDoData);
+
+  console.log("수정 할 데이터 가져왔니 ?", updateToDoData);
 
   const changeData = (
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    const { id, value } = e.target;
-    setData((prev) => ({ ...prev, [id]: value }));
+    const { id: targetId, value } = e.target;
+    // console.log(typeof targetId, value);
+    changeNewData(targetId, value);
+    // setData((prev) => ({ ...prev, [id]: value }));
   };
 
   const postNewToDoData = async () => {
-    if (window.confirm("글 작성을 완료하시겠습니까?")) {
-      try {
-        await myserver.put(
-          `/todos/${id}`,
-          {
-            title,
-            content,
-          },
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
-          }
-        );
-
-        navigate(`/detail/${id}`);
-      } catch (err) {
-        console.log("새로운 투두 만들다가 실패!!");
-      }
-    } else {
-      return;
-    }
+    const { title, content } = updateToDoData;
+    updateTodo(id, title, content);
+    navigate(`/${id}`);
   };
 
-  const getBeforeData = async () => {
-    try {
-      const res = await myserver.get(`/todos/${id}`, {
-        headers: { Authorization: `${token}` },
-      });
-      setData(res.data.data);
-    } catch (err) {
-      console.log("수정 페이지 기존데이터 에러다 ::", err);
-    }
-  };
+  const { title, content } = toDo;
+  const submitDisabled =
+    updateToDoData.title !== "" && updateToDoData.content !== "";
 
   useEffect(() => {
-    getBeforeData();
+    defaultUpdateToDoData();
   }, []);
-
-  const submitDisabled = title !== "" && content !== "";
 
   return (
     <Detail>

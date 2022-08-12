@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
-import myserver from "../axios";
 import { useToDoDataStore } from "../store/todoData";
 import Detail from "./components/Detail";
-
-interface PlaceHolder {
-  submitDisabled: boolean;
-  theme: any;
-}
 
 const Create = () => {
   const [data, setData] = useState({ title: "", content: "" });
