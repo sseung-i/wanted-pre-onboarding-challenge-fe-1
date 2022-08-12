@@ -1,16 +1,11 @@
-import React from "react";
 import styled, { css } from "styled-components";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/auth";
 
 const Nav = () => {
-  const isLogined = useAuthStore((state) => state.isLogined);
-  const setIsLogined = useAuthStore((state) => state.setIsLogined);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     if (window.confirm("🥲 정말 로그아웃 하시겠습니까? 🥲")) {
-      // setIsLogined(false);
       localStorage.removeItem("token");
       navigate("/");
     } else {

@@ -8,7 +8,6 @@ interface Props {
   title: string;
   content: string;
   key: string;
-  // [key: string]: string;
 }
 
 const TodoCard = (props: Props) => {

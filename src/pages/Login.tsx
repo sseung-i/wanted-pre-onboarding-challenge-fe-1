@@ -31,21 +31,6 @@ const Login = () => {
     return !varidation;
   };
 
-  /******************* */
-  const getData = async (token: string) => {
-    try {
-      const res = await myserver.get("/todos/", {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      const reverseData = res.data.data.reverse();
-      return reverseData[0].id;
-    } catch (err) {
-      console.log("Detail 데이터 가져오기 에러", err);
-    }
-  };
-
   // 1. 로그인하기 클릭!
   const handleLogin = async () => {
     try {
@@ -59,7 +44,6 @@ const Login = () => {
       // 4. 로그인 완료
       alert(message);
       getToDoList();
-      console.log("로그인 할 때 ", toDoList);
 
       // 5. 루트로 이동
       navigate(`/${toDoList[0].id}`);
@@ -74,7 +58,8 @@ const Login = () => {
     alert("꺄~💕 다시오셨군요! 자동로그인 되었습니다 🥰 ");
     setIsLogined(true);
     if (token) {
-      const id = await getData(token);
+      getToDoList();
+      const id = toDoList[0].id;
       navigate(`/${id}`);
     }
   };

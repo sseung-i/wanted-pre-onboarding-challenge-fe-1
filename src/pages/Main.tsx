@@ -1,8 +1,16 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 
 const Main = () => {
+  // const token = localStorage.getItem("token");
+  // const navigate = useNavigate();
+
+  useEffect(() => {
+    // token && navigate("/detail");
+  }, []);
+
   return (
     <Container>
       <EmptyContent>로그인을 해주세요!</EmptyContent>

@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import myserver from "../axios";
-import { useAuthStore } from "../store/auth";
 import { useToDoDataStore } from "../store/todoData";
 import Detail from "./components/Detail";
-import Main from "./Main";
-
-interface TodoType {
-  content: string;
-  createdAt?: string;
-  id?: string;
-  title: string;
-  updatedAt?: string;
-}
 
 const Read = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const getToDo = useToDoDataStore((state) => state.getToDo);
   const toDo = useToDoDataStore((state) => state.toDo);
@@ -25,10 +16,6 @@ const Read = () => {
   const getToDoList = useToDoDataStore((state) => state.getToDoList);
 
   const { title, content } = toDo;
-
-  const navigate = useNavigate();
-
-  const token = localStorage.getItem("token");
 
   const afterDelete = async () => {
     getToDoList();
@@ -46,8 +33,8 @@ const Read = () => {
 
   useEffect(() => {
     if (token) {
-      // getToDoList();
       getToDo(id);
+      navigate(`/${id}`);
     } else {
       navigate("/auth/login");
     }
